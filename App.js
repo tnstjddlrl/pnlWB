@@ -9,7 +9,8 @@ import {
   Text,
   useColorScheme,
   View,
-  BackHandler
+  BackHandler,
+  ActivityIndicator
 } from 'react-native';
 
 import { WebView } from 'react-native-webview';
@@ -17,34 +18,30 @@ import { WebView } from 'react-native-webview';
 import RNExitApp from 'react-native-exit-app';
 
 var rnw
+var cbc = false;
 
 const App = () => {
 
-  const [canBack, setCanBack] = useState(false)
-
-
   useEffect(() => {
-    const backAction = () => {
-      if (canBack === true) {
-        rnw.goBack();
-        return true;
-      } else {
-        Alert.alert('앱을 종료하시겠습니까?', '', [
-          {
-            text: "No",
-            onPress: () => console.log("Cancel Pressed")
-          },
-          { text: "Yes", onPress: () => RNExitApp.exitApp() }
-        ])
-        return true;
-      }
-    };
-
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
+      "hwbp",
+      function () {
+        console.log('뭐지: ' + cbc)
+        if (cbc && rnw) {
+          rnw.goBack();
+          return true;
+        } else if (cbc == false) {
+          Alert.alert('앱을 종료하시겠습니까?', '', [
+            {
+              text: "No",
+              onPress: () => console.log("Cancel Pressed")
+            },
+            { text: "Yes", onPress: () => RNExitApp.exitApp() }
+          ])
+          return true;
+        }
+      }
     );
-
     return () => backHandler.remove();
   }, []);
 
@@ -61,7 +58,12 @@ const App = () => {
       }}
       source={{ uri: 'https://pluslink.kr/' }}
       style={{ width: '100%', height: '100%' }}
-      onNavigationStateChange={(navState) => { setCanBack(navState.canGoBack); console.log(navState.canGoBack) }}
+      onNavigationStateChange={(navState) => { cbc = navState.canGoBack; console.log(cbc) }}
+      renderLoading={() => (
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
     />
   )
 }
