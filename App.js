@@ -26,7 +26,6 @@ const App = () => {
     const backHandler = BackHandler.addEventListener(
       "hwbp",
       function () {
-        console.log('뭐지: ' + cbc)
         if (cbc && rnw) {
           rnw.goBack();
           return true;
@@ -51,14 +50,14 @@ const App = () => {
       onMessage={event => {
         console.log(event.nativeEvent.data);
         Alert.alert(event.nativeEvent.data);
-        rnw.postMessage('app')
+        // rnw.postMessage('app')
       }}
       onLoadEnd={() => {
         rnw.postMessage('hello')
       }}
       source={{ uri: 'https://pluslink.kr/' }}
       style={{ width: '100%', height: '100%' }}
-      onNavigationStateChange={(navState) => { cbc = navState.canGoBack; console.log(cbc) }}
+      onNavigationStateChange={(navState) => { cbc = navState.canGoBack; rnw.postMessage('app'); console.log('전송!') }}
       renderLoading={() => (
         <View style={{ flex: 1, alignItems: 'center' }}>
           <ActivityIndicator size="large" />
