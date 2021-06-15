@@ -2,12 +2,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
   Alert,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
   View,
   BackHandler,
   ActivityIndicator
@@ -50,7 +44,6 @@ const App = () => {
       onMessage={event => {
         console.log(event.nativeEvent.data);
         Alert.alert(event.nativeEvent.data);
-        // rnw.postMessage('app')
       }}
       onLoadEnd={() => {
         rnw.postMessage('hello')
