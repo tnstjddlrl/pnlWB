@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import {
   Alert,
@@ -59,7 +58,5 @@ const App = () => {
     />
   )
 }
-
-
 
 export default App;
