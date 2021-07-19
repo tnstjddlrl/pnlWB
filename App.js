@@ -40,13 +40,28 @@ const App = () => {
     return () => backHandler.remove();
   }, []);
 
-  function onShouldStartLoadWithRequest(request) {
-    const { url, lockIdentifier } = request;
+  const onShouldStartLoadWithRequest = (event) => {
+    if (
+      event.url.startsWith('http://') ||
+      event.url.startsWith('https://') ||
+      event.url.startsWith('about:blank')
+    ) {
+      return true;
+    }
+    if (Platform.OS === 'android') {
+      const SendIntentAndroid = require('react-native-send-intent');
+      SendIntentAndroid.openChromeIntent(event.url)
+        .then(isOpened => {
+          if (!isOpened) { alert('앱 실행이 실패했습니다'); }
+        })
+        .catch(err => {
+          console.log(err);
+        });
 
+      return false;
 
-    console.log(url)
-    return true;
-  }
+    }
+  };
 
   return (
     <WebView
