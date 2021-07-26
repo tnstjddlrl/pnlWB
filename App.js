@@ -4,19 +4,35 @@ import {
   View,
   BackHandler,
   ActivityIndicator,
-  NativeModules
+  Linking
 } from 'react-native';
 
 import { WebView } from 'react-native-webview';
 
 import RNExitApp from 'react-native-exit-app';
 
-const { RNCWebView } = NativeModules;
+import VersionCheck from 'react-native-version-check';
 
 var rnw
 var cbc = false;
 
 const App = () => {
+
+  useEffect(() => {
+    console.log(VersionCheck.getPackageName());        // com.reactnative.app
+    console.log(VersionCheck.getCurrentBuildNumber()); // 10
+    console.log(VersionCheck.getCurrentVersion());
+
+    VersionCheck.needUpdate()
+      .then(async res => {
+        console.log(res.isNeeded);  // true
+        if (res.isNeeded) {
+          Linking.openURL(res.storeUrl);  // open store if update is needed.
+        } else {
+          console.log('최신버전!')
+        }
+      });
+  }, [])
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
