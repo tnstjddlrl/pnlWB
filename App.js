@@ -4,7 +4,8 @@ import {
   View,
   BackHandler,
   ActivityIndicator,
-  Linking
+  Linking,
+  SafeAreaView
 } from 'react-native';
 
 import { WebView } from 'react-native-webview';
@@ -80,21 +81,23 @@ const App = () => {
   };
 
   return (
-    <WebView
-      ref={wb => { rnw = wb }}
-      onMessage={event => {
-        console.log(event.nativeEvent.data);
-      }}
-      onLoadEnd={() => {
-        rnw.postMessage('hello')
-      }}
-      originWhitelist={['*']}
-      source={{ uri: 'https://pluslink.kr/' }}
-      style={{ width: '100%', height: '100%' }}
-      onNavigationStateChange={(navState) => { cbc = navState.canGoBack; rnw.postMessage('app'); console.log('전송!') }}
-      onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+    <SafeAreaView style={{ flex: 1 }}>
+      <WebView
+        ref={wb => { rnw = wb }}
+        onMessage={event => {
+          console.log(event.nativeEvent.data);
+        }}
+        onLoadEnd={() => {
+          rnw.postMessage('hello')
+        }}
+        originWhitelist={['*']}
+        source={{ uri: 'https://pluslink.kr/' }}
+        style={{ width: '100%', height: '100%' }}
+        onNavigationStateChange={(navState) => { cbc = navState.canGoBack; rnw.postMessage('app'); console.log('전송!') }}
+        onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
 
-    />
+      />
+    </SafeAreaView>
   )
 }
 
