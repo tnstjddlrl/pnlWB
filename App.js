@@ -14,10 +14,41 @@ import RNExitApp from 'react-native-exit-app';
 
 import VersionCheck from 'react-native-version-check';
 
+import { requestMultiple, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
+
 var rnw
 var cbc = false;
 
 const App = () => {
+
+  async function addPermission() {
+    requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.PHOTO_LIBRARY, PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY]).then((statuses) => {
+      console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
+      console.log('PHOTO_LIBRARY', statuses[PERMISSIONS.IOS.PHOTO_LIBRARY]);
+      console.log('PHOTO_LIBRARY_ADD_ONLY', statuses[PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY]);
+
+      if (statuses[PERMISSIONS.IOS.CAMERA] !== 'granted' || statuses[PERMISSIONS.IOS.PHOTO_LIBRARY] !== 'granted' || statuses[PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY] !== 'granted') {
+        Alert.alert('권한 문제', '설정에서 권한을 허용해주세요!', [
+          { text: "OK", onPress: () => openSettings() }
+        ])
+      }
+    });
+  }
+
+  useEffect(() => {
+
+    if (Platform.OS === 'ios') {
+      addPermission()
+    }
+
+    if (Platform.OS === 'android') {
+      requestMultiple([PERMISSIONS.ANDROID.CAMERA]).then((statuses) => {
+        console.log('Camera', statuses[PERMISSIONS.ANDROID.CAMERA]);
+      });
+    }
+
+  }, [])
+
 
   useEffect(() => {
     console.log(VersionCheck.getPackageName());        // com.reactnative.app
