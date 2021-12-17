@@ -123,11 +123,10 @@ const App = () => {
         }}
         originWhitelist={['*']}
         source={{ uri: 'https://pluslink.kr/' }}
-        style={{ width: '100%', height: '100%' }}
+        style={{ flex: 1 }}
         userAgent='Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.50 Mobile Safari/537.36'
         onNavigationStateChange={(navState) => { cbc = navState.canGoBack; rnw.postMessage('app'); console.log('전송!') }}
         onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-
       />
     </SafeAreaView>
   )
